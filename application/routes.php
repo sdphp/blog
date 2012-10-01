@@ -37,6 +37,20 @@ Route::get('/', function()
 	return View::make('home.index');
 });
 
+Route::get('login', array('as' => 'login', function(){
+	Session::reflash();
+	return View::make('auth.login');
+}));
+Route::post('login', function(){
+	Session::reflash();
+	$credentials = Input::only( array('username', 'password') );
+	if (Auth::attempt($credentials))
+	{
+    	return Redirect::to( Session::get('auth_return') );
+	}
+	return Redirect::to_route('login')->with_input('except', array('password'));
+});
+
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers
@@ -107,5 +121,6 @@ Route::filter('csrf', function()
 
 Route::filter('auth', function()
 {
-	if (Auth::guest()) return Redirect::to('login');
+	Session::flash('auth_return', URI::current() );
+	if (Auth::guest()) return Redirect::to_route('login');
 });
