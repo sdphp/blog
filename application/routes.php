@@ -34,7 +34,7 @@
 
 Route::get('/', function()
 {
-	return View::make('home.index');
+	return Redirect::to_route('blog_listing');
 });
 
 Route::get('login', array('as' => 'login', function(){

@@ -2,5 +2,8 @@
 
 class User extends Eloquent
 {
-
+	public function posts()
+	{
+		return $this->has_many('Blog\Post', 'author_id');
+	}
 }
